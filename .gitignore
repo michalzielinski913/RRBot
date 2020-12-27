@@ -1,0 +1,8 @@
+
+__pycache__/
+
+.idea/
+
+login_data.py
+
+debug.log
