@@ -17,7 +17,7 @@ Currently API can:
 * Check any user stats
 * Check current region resources
 * Check If region has reached daily exploration limit
-	
+* Check any user residency region id
 ## Setup
 This project uses python 3.7 with the following libraries:
 * Numpy

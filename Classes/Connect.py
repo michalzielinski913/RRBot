@@ -55,6 +55,9 @@ class Connect:
         uranium = self.browser.find_element_by_xpath(self.xuranium).text
         diamond = self.browser.find_element_by_xpath(self.xdiamond).text
         results = np.array([gold, oil, mineral, uranium, diamond])
+
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
         time.sleep(1)
         return results
 
@@ -68,11 +71,14 @@ class Connect:
 
     def checkUserStats(self, id):
         self.browser.get('http://rivalregions.com/#slide/profile/'+str(id))
+        self.browser.refresh();
         strength = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[1]").text
         education = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[2]").text
         endurance = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[3]").text
         results = np.array([strength, education, endurance])
         self.browser.find_element_by_xpath("/html/body/div[3]/div/div[1]").click()
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
         time.sleep(1)
         return results
 
@@ -83,7 +89,7 @@ class Connect:
     def CheckAvailableResources(self):
         #Go to work tab
         self.browser.find_element_by_xpath("/html/body/div[5]/div[2]/div[9]").click()
-        results = np.array([])
+        results = np.array([], dtype=bool)
         for x in self.resources:
             r = self.browser.find_element_by_xpath(x)
             hover=ActionChains(self.browser).move_to_element(r)
@@ -98,4 +104,19 @@ class Connect:
 
             time.sleep(1)
         #[True, True, True, True, True]
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
+        time.sleep(1)
         return results
+
+    def CheckUserResidency(self, id):
+        self.browser.get('http://rivalregions.com/#slide/profile/' + str(id))
+        self.browser.refresh();
+
+        residencyTag = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[8]/td[2]/div")
+        result=(int(''.join(c for c in residencyTag.get_attribute("action") if c.isdigit())))
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
+        time.sleep(1)
+        return result
+

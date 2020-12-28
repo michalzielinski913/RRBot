@@ -45,3 +45,5 @@ class Client:
     def CheckAvailableResources(self):
         return self.connection.CheckAvailableResources()
 
+    def CheckResidency(self):
+        return(self.connection.CheckUserResidency(self.id))
