@@ -17,10 +17,16 @@ class Client:
         else:
             print("nope")
 
-        time.sleep(10)
-        self.id=self.connection.checkCurrentUserID()
+
+        try:
+            self.id = self.connection.checkCurrentUserID()
+        except:
+            print("Couldn't download user ID")
+            self.id = self.connection.checkCurrentUserID()
 
     def getUserID(self):
+        if self.id is None:
+            self.id = self.connection.checkCurrentUserID()
         return self.id
 
     def getMoney(self):
@@ -30,10 +36,12 @@ class Client:
         results=self.connection.checkRegionresource()
         print(results)
 
-    def checkUserStats(self, userId):
-        stats=self.connection.checkUserStats(userId)
+    def checkUserStats(self):
+        if self.id is None:
+            self.id = self.connection.checkCurrentUserID()
+        stats=self.connection.checkUserStats(self.id)
         print(stats)
 
-    def debug(self):
-        self.connection.CheckAvailableResource()
+    def CheckAvailableResources(self):
+        return self.connection.CheckAvailableResources()
 
