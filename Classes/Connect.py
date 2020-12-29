@@ -1,8 +1,9 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
-
+import threading
 # Initiate the browser
 import time
 from selenium.webdriver.chrome.options import Options
@@ -31,7 +32,7 @@ class Connect:
     def connectFacebook(self, login, password):
         element =  self.browser.find_element_by_class_name('sa_link')
         self.browser.get(element.get_attribute('href'))
-        self.browser.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div/div/div[3]/button[2]').click();
+        self.browser.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div/div/div[3]/button[2]').click()
         self.browser.find_element_by_name("email").send_keys(login)
         self.browser.find_element_by_name("pass").send_keys(password)
         # # Click Log In
@@ -122,4 +123,70 @@ class Connect:
         self.browser.refresh();
         time.sleep(1)
         return result
+
+    def checkPartyNumbers(self, id):
+        self.browser.get('http://rivalregions.com/#slide/party/' + str(id))
+        self.browser.refresh();
+        #/html/body/div[3]/div/div[3]/div/div[2]/div/div[2]/div/div[2]
+        number = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div[2]/div/div[2]/div/div[2]").text
+        boolean=True
+        while boolean:
+            try:
+                result=(int(''.join(c for c in number if c.isdigit())))
+            except:
+                number = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div[2]/div/div[2]/div/div[2]").text
+                continue
+            boolean=False
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
+        time.sleep(1)
+        return result
+
+    def __checkIfExist(self):
+        try:
+            test=self.browser.find_element_by_id("list_last")
+        except NoSuchElementException:
+            print("false")
+            return False
+        print("True")
+        return True
+
+    def scrolllock(self):
+        action = webdriver.ActionChains(self.browser)
+        element = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div/div[2]/div[2]/div")
+        action.move_to_element(element).click_and_hold()
+        action.move_to_element(element).click_and_hold()
+        action.move_by_offset(0, 50).perform()
+        action.release().perform()
+
+
+    def retrievePartyMembersID(self, id):
+        number=self.checkPartyNumbers(id)
+        self.browser.get('http://rivalregions.com/#listed/party/' + str(id))
+        self.browser.refresh()
+        results=np.array([])
+        boolean=True
+        time.sleep(1)
+        while boolean:
+            try:
+                self.browser.execute_script("document.getElementById('list_last').click();")
+            except Exception as ex:
+                #print(ex)
+                boolean=False
+        for x in range(number):
+            y=x+1
+            try:
+                member=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div/div[1]/table/tbody/tr["+str(y)+"]")
+
+            except:
+                self.scrolllock()
+            results = np.append(results, [member.get_attribute("user")])
+
+        self.browser.get('http://rivalregions.com/#overview')
+        self.browser.refresh();
+        return results
+
+
+
+
 

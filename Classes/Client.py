@@ -52,3 +52,11 @@ class Client:
     #Residency region id
     def CheckResidency(self):
         return self.residency
+
+    #Check how many people are in given party
+    def CheckPartyPopulation(self, id):
+        return self.connection.checkPartyNumbers(id)
+
+    #Return party members id list
+    def CheckPartyMembers(self, id):
+        return self.connection.retrievePartyMembersID(id)
