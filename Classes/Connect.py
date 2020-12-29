@@ -45,15 +45,19 @@ class Connect:
         time.sleep(1)
         return money
 
-    def checkRegionresource(self):
-        #/html/body/div[5]/div[2]/div[9]
-        self.browser.find_element_by_xpath("/html/body/div[5]/div[2]/div[9]").click()
-        #/html/body/div[6]/div[1]/div[4]/div[1]/h1/span[1]
-        gold = self.browser.find_element_by_xpath(self.xgold).text
-        oil = self.browser.find_element_by_xpath(self.xoil).text
-        mineral = self.browser.find_element_by_xpath(self.xmineral).text
-        uranium = self.browser.find_element_by_xpath(self.xuranium).text
-        diamond = self.browser.find_element_by_xpath(self.xdiamond).text
+    def checkRegionresource(self, id):
+        self.browser.get('http://rivalregions.com/#map/details/'+str(id))
+        self.browser.refresh();
+        action=webdriver.ActionChains(self.browser)
+        element=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[2]/div[2]/div")
+        action.move_to_element(element).click_and_hold()
+        action.move_by_offset(0, 50).perform()
+        action.release().perform()
+        gold = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[18]/div[2]/span[1]").text
+        oil = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[19]/div[2]/span[1]").text
+        mineral = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[20]/div[2]/span[1]").text
+        uranium = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[21]/div[2]/span[1]").text
+        diamond = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[22]/div[2]/span[1]").text
         results = np.array([gold, oil, mineral, uranium, diamond])
 
         self.browser.get('http://rivalregions.com/#overview')
@@ -62,9 +66,6 @@ class Connect:
         return results
 
     def checkCurrentUserID(self):
-        #/html/body/div[5]/div[1]/div[1]/img[2] print(driver.current_url)
-        # self.browser.find_element_by_xpath("/html/body/div[5]/div[1]/div[1]/img[2]").click()
-        # url=self.browser.current_url
         url = self.browser.execute_script("return id")
         time.sleep(1)
         return url
@@ -88,13 +89,15 @@ class Connect:
 
     def CheckAvailableResources(self):
         #Go to work tab
-        self.browser.find_element_by_xpath("/html/body/div[5]/div[2]/div[9]").click()
+        self.browser.get('http://rivalregions.com/#work')
+        self.browser.refresh();
+        time.sleep(1)
         results = np.array([], dtype=bool)
         for x in self.resources:
             r = self.browser.find_element_by_xpath(x)
             hover=ActionChains(self.browser).move_to_element(r)
             hover.perform()
-            tests=self.browser.find_element_by_xpath("/html/body/div[7]/div[2]")
+            tests=self.browser.find_element_by_xpath("/html/body/div[8]/div[2]")
             data=[pos for pos, char in enumerate(tests.text) if char == '/']
             if(data[0]==1 and (tests.text)[0]=='0'):
                 if(tests.text[(data[1]+1):]==tests.text[(data[1]-len(tests.text[(data[1]+1):])):data[1]]):
