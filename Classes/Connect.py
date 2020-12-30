@@ -1,9 +1,7 @@
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
+
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
-import threading
 # Initiate the browser
 import time
 from selenium.webdriver.chrome.options import Options
@@ -37,8 +35,14 @@ class Connect:
         self.browser.find_element_by_name("pass").send_keys(password)
         # # Click Log In
         self.browser.find_element_by_id('loginbutton').click();
-        print("Logged in, waiting for server response. It will take 10 seconds")
-        time.sleep(10)
+        print("Logged in, waiting for server response.")
+        while True:
+            if(self.browser.current_url!="http://rivalregions.com/#overview"):
+                time.sleep(3)
+                print("Response received")
+                break
+            else:
+                time.sleep(0.1)
 
 
     def getMoney(self):
@@ -73,15 +77,12 @@ class Connect:
 
     def checkUserStats(self, id):
         self.browser.get('http://rivalregions.com/#slide/profile/'+str(id))
-        self.browser.refresh();
-        strength = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[1]").text
-        education = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[2]").text
-        endurance = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[5]/div[3]/table/tbody/tr[2]/td[2]/span[3]").text
-        results = np.array([strength, education, endurance])
-        self.browser.find_element_by_xpath("/html/body/div[3]/div/div[1]").click()
-        self.browser.get('http://rivalregions.com/#overview')
-        self.browser.refresh();
+        self.browser.refresh();        #         By.cssSelector("[action: \"listed/perk/1\"]")
         time.sleep(1)
+        strength = self.browser.find_element_by_css_selector("[action=\"listed/perk/1\"]").text
+        education = self.browser.find_element_by_css_selector("[action=\"listed/perk/2\"]").text
+        endurance = self.browser.find_element_by_css_selector("[action=\"listed/perk/3\"]").text
+        results = np.array([strength, education, endurance])
         return results
 
     def getMoney(self):
@@ -137,19 +138,7 @@ class Connect:
                 number = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div[2]/div/div[2]/div/div[2]").text
                 continue
             boolean=False
-        self.browser.get('http://rivalregions.com/#overview')
-        self.browser.refresh();
-        time.sleep(1)
         return result
-
-    def __checkIfExist(self):
-        try:
-            test=self.browser.find_element_by_id("list_last")
-        except NoSuchElementException:
-            print("false")
-            return False
-        print("True")
-        return True
 
     def scrolllock(self):
         action = webdriver.ActionChains(self.browser)
@@ -165,26 +154,20 @@ class Connect:
         self.browser.get('http://rivalregions.com/#listed/party/' + str(id))
         self.browser.refresh()
         results=np.array([])
-        boolean=True
         time.sleep(1)
-        while boolean:
-            try:
-                self.browser.execute_script("document.getElementById('list_last').click();")
-            except Exception as ex:
-                #print(ex)
-                boolean=False
-        for x in range(number):
-            y=x+1
-            try:
-                member=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div/div/div[1]/table/tbody/tr["+str(y)+"]")
+        fetched=0
+        time.sleep(5)
+        table = self.browser.find_element_by_xpath("//table[@id='table_list']")
+        fetched=len(table.find_elements_by_xpath(".//tr"))
+        while(fetched<number):
+            self.browser.execute_script("document.getElementById('list_last').click();")
+            time.sleep(1)
+            table = self.browser.find_element_by_xpath("//table[@class='list_table tc']")
+            fetched = len(table.find_elements_by_xpath(".//tr"))
+        for row in table.find_elements_by_xpath(".//tr")[1:]:
+            results = np.append(results, [row.get_attribute("user")])
 
-            except:
-                self.scrolllock()
-            results = np.append(results, [member.get_attribute("user")])
-
-        self.browser.get('http://rivalregions.com/#overview')
-        self.browser.refresh();
-        return results
+        return (results)
 
 
 

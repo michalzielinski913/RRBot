@@ -23,7 +23,6 @@ class Client:
             self.residency = (self.connection.CheckUserResidency(self.id))
         except:
             print("Couldn't download user ID")
-            self.id = self.connection.checkCurrentUserID()
 
     def getUserID(self):
         if self.id is None:
@@ -39,10 +38,10 @@ class Client:
         return results
 
     #Check statistics of user
-    def checkUserStats(self):
-        if self.id is None:
-            self.id = self.connection.checkCurrentUserID()
-        stats=self.connection.checkUserStats(self.id)
+    def checkUserStats(self, ID=None):
+        if ID is None:
+            ID=self.id
+        stats=self.connection.checkUserStats(ID)
         return (stats)
 
     #Check which resourcess are available in current region

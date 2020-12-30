@@ -18,6 +18,7 @@ Currently API can:
 * Check current region resources
 * Check If region has reached daily exploration limit
 * Check any user residency region id
+* Retrieve ID list of all members of given party
 ## Setup
 This project uses python 3.7 with the following libraries:
 * Numpy
