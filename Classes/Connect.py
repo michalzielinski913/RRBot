@@ -38,7 +38,13 @@ class Connect:
         print("Logged in, waiting for server response.")
         while True:
             if(self.browser.current_url!="http://rivalregions.com/#overview"):
-                time.sleep(3)
+                while(True):
+                    try:
+                        url = self.browser.execute_script("return id")
+                        if(not(url is None)):
+                            break
+                    except:
+                        time.sleep(1)
                 print("Response received")
                 break
             else:
@@ -99,7 +105,7 @@ class Connect:
             r = self.browser.find_element_by_xpath(x)
             hover=ActionChains(self.browser).move_to_element(r)
             hover.perform()
-            tests=self.browser.find_element_by_xpath("/html/body/div[8]/div[2]")
+            tests=self.browser.find_element_by_id("tiptip_content")
             data=[pos for pos, char in enumerate(tests.text) if char == '/']
             if(data[0]==1 and (tests.text)[0]=='0'):
                 if(tests.text[(data[1]+1):]==tests.text[(data[1]-len(tests.text[(data[1]+1):])):data[1]]):
