@@ -96,7 +96,7 @@ class Connect:
         time.sleep(1)
         return self.browser.find_element_by_xpath("/html/body/div[5]/div[1]/div[1]/div[4]/span[1]/span").text
 
-    def CheckAvailableResources(self):
+    def checkAvailableResources(self):
         #Go to work tab
         self.browser.get('http://rivalregions.com/#work')
         self.browser.refresh();
@@ -121,7 +121,7 @@ class Connect:
         time.sleep(1)
         return results
 
-    def CheckUserResidency(self, id):
+    def checkUserResidency(self, id):
         self.browser.get('http://rivalregions.com/#slide/profile/' + str(id))
         self.browser.refresh();
 
@@ -176,7 +176,17 @@ class Connect:
 
         return (results)
 
-
+    def getUsername(self, id):
+        self.browser.get('http://rivalregions.com/#slide/profile/' + str(id))
+        self.browser.refresh();
+        time.sleep(1)
+        username=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[4]/h1").text
+        pos=0
+        for x in range(len(username)):
+            if(username[x]==":"):
+                pos=x+2
+                break
+        return username[pos:]
 
 
 

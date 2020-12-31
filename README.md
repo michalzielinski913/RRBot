@@ -15,6 +15,7 @@ Currently API can:
 * Login using Facebook account only 
 * Retrieve current user balance
 * Check any user stats
+* Download any user username
 * Check current region resources
 * Check If region has reached daily exploration limit
 * Check any user residency region id

@@ -20,7 +20,7 @@ class Client:
 
         try:
             self.id = self.connection.checkCurrentUserID()
-            self.residency = (self.connection.CheckUserResidency(self.id))
+            self.residency = (self.connection.checkUserResidency(self.id))
         except:
             print("Couldn't download user ID")
 
@@ -52,17 +52,36 @@ class Client:
         return (stats)
 
     #Check which resourcess are available in current region
-    def CheckAvailableResources(self):
-        return self.connection.CheckAvailableResources()
+    def checkAvailableResources(self):
+        return self.connection.checkAvailableResources()
 
     #Residency region id
-    def CheckResidency(self):
+    def checkResidency(self):
         return self.residency
 
     #Check how many people are in given party
-    def CheckPartyPopulation(self, id):
+    def checkPartyPopulation(self, id):
         return self.connection.checkPartyNumbers(id)
 
     #Return party members id list
-    def CheckPartyMembers(self, id):
+    def checkPartyMembers(self, id):
         return self.connection.retrievePartyMembersID(id)
+
+    # def sendMessage(self, *args, message=""):
+    #     #placeholder
+    #     for x in args:
+    #         try:
+    #             #self.connection.sendMessage(x)
+    #             print("Sending "+str(message)+" to "+str(x))
+    #         except:
+    #             print("Couldn't send message to user "+str(x))
+
+    def getUsername(self, ID=None):
+        if ID is None:
+            ID=self.id
+        try:
+            username=self.connection.getUsername(ID)
+        except:
+            #You can put strange characters to you RR nickname so try except is here just in case
+            print("Couldn't fetch username")
+        return (username)
