@@ -17,6 +17,7 @@ Currently API can:
 
 #### User
 * Retrieve user ID
+* Retrieve username
 * Retrieve current user money balance
 * Check user residency region ID
 * Retrieve user party ID
