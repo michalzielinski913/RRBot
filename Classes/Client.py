@@ -85,3 +85,20 @@ class Client:
             #You can put strange characters to you RR nickname so try except is here just in case
             print("Couldn't fetch username")
         return (username)
+
+    def getUserParty(self, ID=None):
+        if ID is None:
+            ID = self.id
+        try:
+            party = self.connection.getUserParty(ID)
+        except:
+            print("Couldn't fetch user party")
+        return party
+
+    def getPartyName(self, ID):
+        try:
+            party = self.connection.getPartyName(ID)
+        except:
+            # You can put strange characters to you RR nickname so try except is here just in case
+            print("Couldn't fetch party name")
+        return party

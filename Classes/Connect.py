@@ -188,5 +188,23 @@ class Connect:
                 break
         return username[pos:]
 
+    def getUserParty(self, ID):
+        #[class~="logo"]  ("[action=\"listed/perk/1\"]").text       WebElement m=driver.findElement(By.cssSelector("input[id^='gsc']"));
+        self.browser.get('http://rivalregions.com/#slide/profile/' + str(ID))
+        self.browser.refresh();
+        time.sleep(1)
+        party=self.browser.find_element_by_css_selector("div[action^='slide/party/']")
+        party_tag=party.get_attribute("action")
+        result = (int(''.join(c for c in party_tag if c.isdigit())))
+        return result
+
+    def getPartyName(self, ID):
+        partyURL='https://rivalregions.com/#slide/party/' + str(ID)
+        self.browser.get(partyURL)
+        self.browser.refresh();
+        time.sleep(1)
+        party=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[2]/h1/a").text
+        return party
+
 
 

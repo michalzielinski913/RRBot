@@ -12,14 +12,24 @@ This project is unofficial API for Rival Regions game. It is in early developmen
 	
 ## Current stage
 Currently API can:
+#### Accessing game
 * Login using Facebook account only 
-* Retrieve current user balance
-* Check any user stats
-* Download any user username
-* Check current region resources
-* Check If region has reached daily exploration limit
-* Check any user residency region id
-* Retrieve ID list of all members of given party
+
+#### User
+* Retrieve user ID
+* Retrieve current user money balance
+* Check user residency region ID
+* Retrieve user party ID
+* Retrieve user perks
+
+#### Regions
+* Check region current resource limit
+* Check current region daily limit
+
+#### Parties
+* Retrieve ID list of all party members
+* Retrieve party name
+
 ## Setup
 This project uses python 3.7 with the following libraries:
 * Numpy
