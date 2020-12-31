@@ -33,8 +33,15 @@ class Client:
         return self.connection.getMoney()
 
     #Check current resources of user residency region
-    def checkRegionresource(self):
-        results=self.connection.checkRegionresource(self.residency)
+    def checkRegionresource(self, ID=None):
+        try:
+            if(ID is None):
+                results=self.connection.checkRegionresource(self.residency)
+            else:
+                results = self.connection.checkRegionresource(ID)
+        except:
+            print("Couldn't fetch region data")
+            return []
         return results
 
     #Check statistics of user

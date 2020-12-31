@@ -64,15 +64,16 @@ class Connect:
         action.move_to_element(element).click_and_hold()
         action.move_by_offset(0, 50).perform()
         action.release().perform()
-        gold = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[18]/div[2]/span[1]").text
-        oil = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[19]/div[2]/span[1]").text
-        mineral = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[20]/div[2]/span[1]").text
-        uranium = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[21]/div[2]/span[1]").text
-        diamond = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[22]/div[2]/span[1]").text
-        results = np.array([gold, oil, mineral, uranium, diamond])
-
-        self.browser.get('http://rivalregions.com/#overview')
-        self.browser.refresh();
+        results=np.array([])
+        test = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div[18]/div[2]/span[1]").text
+        if (test.count("km") == 1):
+            y = 19
+        else:
+            y = 18
+        for x in range(5):
+            z=y+x
+            resource = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[2]/div/div[1]/div["+str(z)+"]/div[2]/span[1]").text
+            results=np.append(results, [resource])
         time.sleep(1)
         return results
 
