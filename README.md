@@ -22,6 +22,7 @@ Currently API can:
 * Check user residency region ID
 * Retrieve user party ID
 * Retrieve user perks
+* Move user to given region (Experimental)
 
 #### Regions
 * Check region current resource limit

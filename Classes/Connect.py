@@ -206,5 +206,25 @@ class Connect:
         party=self.browser.find_element_by_xpath("/html/body/div[3]/div/div[2]/h1/a").text
         return party
 
+    def moveToRegion(self, ID, money):
+        self.browser.get('https://rivalregions.com/#map/details/' + str(ID))
+        self.browser.refresh();
+        action = webdriver.ActionChains(self.browser)
+        element = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[1]/div[1]")
+        action.move_to_element(element).click().perform()
+        time.sleep(1)
+        requiredMoney=self.browser.find_element_by_id("move_here")
+        requiredMoneyI = (int(''.join(c for c in requiredMoney.text if c.isdigit())))
+        moneyI=(int(''.join(c for c in money if c.isdigit())))
+        if(moneyI>=requiredMoneyI):
 
+            action.move_to_element(requiredMoney).click().perform()
+            time.sleep(1)
+            #timeS=(self.browser.execute_script("document.querySelector(\"#map_region_det_data > div > div.float_left.map_d_1.no_pointer > div > span\").textContent"))
+            #print(timeS)
+            self.browser.execute_script("document.getElementById(\"move_here_ok\").click()")
+            print("Moving to given region")
+
+        else:
+            print("Not enough money")
 

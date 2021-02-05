@@ -102,3 +102,10 @@ class Client:
             # You can put strange characters to you RR nickname so try except is here just in case
             print("Couldn't fetch party name")
         return party
+
+    def moveToRegion(self, ID):
+        money=self.getMoney()
+        try:
+            self.connection.moveToRegion(ID, money)
+        except:
+            print("Couldn't move to defined region")
