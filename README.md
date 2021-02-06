@@ -32,6 +32,9 @@ Currently API can:
 * Retrieve ID list of all party members
 * Retrieve party name
 
+### Countries
+* Retrieve ID list of all regions in the country
+
 ## Setup
 This project uses python 3.7 with the following libraries:
 * Numpy

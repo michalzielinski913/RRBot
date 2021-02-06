@@ -27,3 +27,5 @@ print("Endochi party members:")
 result=client.checkPartyMembers("272406")
 print(result)
 client.moveToRegion(3808)
+
+client.getCountryRegions(2307)

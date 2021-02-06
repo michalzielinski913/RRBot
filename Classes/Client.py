@@ -109,3 +109,6 @@ class Client:
             self.connection.moveToRegion(ID, money)
         except:
             print("Couldn't move to defined region")
+
+    def getCountryRegions(self, ID):
+        self.connection.getCountryRegions(ID)

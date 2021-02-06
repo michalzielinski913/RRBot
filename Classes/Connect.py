@@ -6,6 +6,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 from selenium.webdriver.chrome.options import Options
 import numpy as np
+import datetime
+import warnings
+
 class Connect:
 
     def __init__(self, headless):
@@ -211,6 +214,9 @@ class Connect:
         self.browser.refresh();
         action = webdriver.ActionChains(self.browser)
         element = self.browser.find_element_by_xpath("/html/body/div[3]/div/div[3]/div[1]/div[1]")
+        if(element.text=="Request residency"):
+            warnings.warn("You cant move to the region where you are currently in!")
+            return
         action.move_to_element(element).click().perform()
         time.sleep(1)
         requiredMoney=self.browser.find_element_by_id("move_here")
@@ -220,11 +226,30 @@ class Connect:
 
             action.move_to_element(requiredMoney).click().perform()
             time.sleep(1)
-            #timeS=(self.browser.execute_script("document.querySelector(\"#map_region_det_data > div > div.float_left.map_d_1.no_pointer > div > span\").textContent"))
-            #print(timeS)
+            timeS=(self.browser.execute_script("return document.querySelector(\"#map_region_det_data > div > div.float_left.map_d_1.no_pointer > div > span\").innerText"))
+            L = timeS.split(':')
+            if len(L) == 1:
+                sec= L[0]
+            elif len(L) == 2:
+                datee = datetime.datetime.strptime(timeS, "%M:%S")
+                sec= datee.minute * 60 + datee.second
+            elif len(L) == 3:
+                datee = datetime.datetime.strptime(timeS, "%H:%M:%S")
+                sec= datee.hour * 3600 + datee.minute * 60 + datee.second
             self.browser.execute_script("document.getElementById(\"move_here_ok\").click()")
-            print("Moving to given region")
+            print("Moving to given region, It will take "+str(sec)+" seconds")
 
         else:
             print("Not enough money")
+
+    def getCountryRegions(self, ID):
+        self.browser.get('https://rivalregions.com/#state/details/' + str(ID))
+        self.browser.refresh();
+        time.sleep(1)
+        regionsID=[]
+        regionAmount=self.browser.execute_script("return document.getElementsByClassName(\"short_details tc tip header_buttons_hover float_left\").length")
+        for x in range(regionAmount):
+            regionsID.append((int(''.join(c for c in self.browser.execute_script("return document.getElementsByClassName(\"short_details tc tip header_buttons_hover float_left\")["+str(x)+"].getAttribute(\"action\")") if c.isdigit()))))
+        print(regionsID)
+
 
