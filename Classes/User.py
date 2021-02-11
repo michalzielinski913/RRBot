@@ -43,3 +43,4 @@ class User:
 
     def getResidency(self):
         return self.residency
+
